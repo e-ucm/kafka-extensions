@@ -72,7 +72,7 @@ for i in "${!projects[@]}"; do
     project=${projects[$i]};
     kafka_version="7.8.0"
     $SCRIPT_DIR/build.sh --kafka $kafka_version --kafka-storage-partitioner 11.0.2 --kafka-api 3.9.0 --kafka-s3 10.2.16 "$SCRIPT_DIR/../$project"
-    cp $SCRIPT_DIR/../${project}/target/es.e-ucm.simva.kafka.$project-$BUILD_VERSION.jar $SCRIPT_DIR/builds-$BUILD_VERSION/es.e-ucm.simva.kafka.$project-$BUILD_VERSION-kafka${kafka_version%%.*}.jar
+    cp $SCRIPT_DIR/../${project}/target/es.e-ucm.simva.kafka.$project-$BUILD_VERSION.jar $SCRIPT_DIR/builds-$BUILD_VERSION/es.e-ucm.simva.kafka.$project-kafka${kafka_version%%.*}-$BUILD_VERSION.jar
 done
 
 projects=("simva-kafka-connect-json-partitioner")
@@ -81,7 +81,7 @@ for i in "${!projects[@]}"; do
     project=${projects[$i]};
     kafka_version="5.5.0"
     $SCRIPT_DIR/build.sh --kafka $kafka_version --kafka-storage-partitioner $kafka_version --kafka-api 3.9.0 --kafka-s3 $kafka_version "$SCRIPT_DIR/../$project"
-    cp $SCRIPT_DIR/../${project}/target/es.e-ucm.simva.kafka.$project-$BUILD_VERSION.jar $SCRIPT_DIR/builds-$BUILD_VERSION/es.e-ucm.simva.kafka.$project-$BUILD_VERSION-kafka${kafka_version%%.*}.jar
+    cp $SCRIPT_DIR/../${project}/target/es.e-ucm.simva.kafka.$project-$BUILD_VERSION.jar $SCRIPT_DIR/builds-$BUILD_VERSION/es.e-ucm.simva.kafka.$project-kafka${kafka_version%%.*}-$BUILD_VERSION.jar
 done
 
 pushd "$SCRIPT_DIR/builds-$BUILD_VERSION"
