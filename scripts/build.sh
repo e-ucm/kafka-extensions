@@ -3,6 +3,7 @@ set -eo pipefail
 [[ "${DEBUG}" == "true" ]] && set -x
 
 : ${MAVEN_BUILDER_IMAGE:=maven:3.6.3-jdk-8-slim} #maven:3.9.9-eclipse-temurin-17
+: ${BUILD_VERSION:=1.0.0}
 : ${KAFKA_VERSION:=7.8.0}
 : ${KAFKA_SP_VERSION:=11.2.16}
 : ${KAFKA_API_VERSION:=3.9.0}
@@ -25,6 +26,8 @@ function usage ()
     echo 1>&2 "      Shows this help message and exits."
     echo 1>&2 "  -c, --cache <cache path>"
     echo 1>&2 "      Folder were maven cache is stored (useful to reuse between executions)."
+    echo 1>&2 "  -b, --build <build version>"
+    echo 1>&2 "      Package version (-Drevision) of the extension (${BUILD_VERSION})."
     echo 1>&2 "  -k, --kafka <kafka version>"
     echo 1>&2 "      Kafka version to compile the extension."
     echo 1>&2 "  -sp, --kafka-storage-partitioner <kafka SP version>"
@@ -39,6 +42,7 @@ function usage ()
 LIST_LONG_OPTIONS=(
   "help"
   "cache:"
+  "build:"
   "kafka:"
   "kafka-storage-partitioner:"
   "kafka-api:"
@@ -47,6 +51,7 @@ LIST_LONG_OPTIONS=(
 LIST_SHORT_OPTIONS=(
   "h"
   "c:"
+  "b:"
   "k:"
   "sp:"
   "api:"
@@ -69,6 +74,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     -c | --cache )
         m2_cache=$(realpath "$2")
+        shift 2
+        ;;
+    -b | --build )
+        BUILD_VERSION="$2"
         shift 2
         ;;
     -k | --kafka )
@@ -109,7 +118,7 @@ if [[ ! -d "${m2_cache}" ]]; then
     mkdir -p "${m2_cache}"
 fi
 
-mvn_cmd="mvn -Duser.home=/maven-config -Dkafka.connect.version=${KAFKA_VERSION} -Dkafka.connect-storage-partitioner.version=${KAFKA_SP_VERSION} -Dkafka.connect-api.version=${KAFKA_API_VERSION} -Dkafka.connect-s3.version=${KAFKA_S3_VERSION} clean package"
+mvn_cmd="mvn -Duser.home=/maven-config -Drevision=${BUILD_VERSION} -Dkafka.connect.version=${KAFKA_VERSION} -Dkafka.connect-storage-partitioner.version=${KAFKA_SP_VERSION} -Dkafka.connect-api.version=${KAFKA_API_VERSION} -Dkafka.connect-s3.version=${KAFKA_S3_VERSION} clean package"
 user_uid=$(id -u ${USER})
 user_gid=$(id -g ${USER})
 

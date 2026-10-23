@@ -5,9 +5,10 @@
 
     <groupId>es.e-ucm.simva.kafka</groupId>
     <artifactId>simva-kafka-connect-json-format</artifactId>
-    <version>1.0.0</version>
+    <version>${revision}</version>
     
 	<properties>
+		<revision>1.0.0</revision>
 		<maven.compiler.source>8</maven.compiler.source>
 		<maven.compiler.target>8</maven.compiler.target>
         <confluent.maven.repo>http://packages.confluent.io/maven/</confluent.maven.repo>
